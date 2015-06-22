@@ -54,7 +54,12 @@ public class Network {
 		// Abstand / differenz schwarz weiß
 	}
 	
-	public double calculateFitness(double abstand) {
+	public double calculateFitness(Point startLocation, Point endLocation, boolean isBlack) {
+		if (isBlack == true)
+			black++;
+		else
+			white++;
+		double abstand = Math.sqrt(Math.pow(endLocation.getX() - startLocation.getX(), 2) + Math.pow(endLocation.getY() - startLocation.getY(), 2));
 		return (abstand / (black - white));
 	}
 	

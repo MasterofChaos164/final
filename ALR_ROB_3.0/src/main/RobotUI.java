@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import robot.Robot_Simulation;
+import robot.Robot_Simulation2;
 
 public class RobotUI extends JPanel{
 //	private Main main;
@@ -16,10 +17,10 @@ public class RobotUI extends JPanel{
 	private int frame_height;
 	private JFrame frame;
 	
-	private Robot_Simulation robot;
+	private Robot_Simulation2 robot;
 	
-	public RobotUI(Robot_Simulation robot, BufferedImage image) {
-		this.robot = robot;
+	public RobotUI(Robot_Simulation2 robot2, BufferedImage image) {
+		this.robot = robot2;
 		this.image = image; 
 		this.frame_width = this.image.getWidth();
 		this.frame_height = this.image.getHeight();
@@ -37,17 +38,14 @@ public class RobotUI extends JPanel{
 		this.setBackground(Color.cyan);
 	}
 	
-	public boolean isOnLine(int x, int y) {
-		if(new Color(image.getRGB(x, y)).equals(new Color(0, 0, 0)))
-			return true;		
-		return false;
+	public void setRobot(Robot_Simulation2 robot) {
+		this.robot = robot;
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawBackground(g);
 		drawRobot(g);
-		drawSensor(g);
 	}
 	
 	public void drawBackground(Graphics g) {
@@ -56,11 +54,6 @@ public class RobotUI extends JPanel{
 	
 	public void drawRobot(Graphics g) {
 		g.setColor(robot.getRobotColor());
-		g.fillOval(robot.getRobotLocation().x, robot.getRobotLocation().y, robot.getRobotSize().width, robot.getRobotSize().height);
-	}
-	
-	public void drawSensor(Graphics g) {
-		g.setColor(robot.getSensorColor());
-		g.fillRect(robot.getSensorLocation().x, robot.getSensorLocation().y, robot.getSensorSize().width, robot.getSensorSize().height);
+		g.drawLine((int)robot.getRobot().x1, (int)robot.getRobot().y1, (int)robot.getRobot().x2, (int)robot.getRobot().y2);
 	}
 }
