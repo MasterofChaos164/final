@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 import network.Network;
 
-public class Robot_Simulation {
+public class Robot_Simulation2 {
 	
 	private Point robotLocation;
 	private Dimension robotSize;
@@ -17,6 +17,8 @@ public class Robot_Simulation {
 	private Dimension sensorSize;
 	private Color sensorColor;
 	
+	private Point sensorStartLocation;
+	
 	private BufferedImage image;
 	
 	// Anzahl der Schritte pro Sekunde
@@ -24,14 +26,16 @@ public class Robot_Simulation {
 	
 	private Network network;
 	
-	public Robot_Simulation(BufferedImage image) {
-
+	public Robot_Simulation2(BufferedImage image) {
+		
 		robotSize = new Dimension(20,20);
 		robotLocation = new Point(50, 130);
 		robotColor = Color.GREEN;
 		
+		sensorStartLocation = new Point(robotLocation.x + 13 /* TODO */, robotLocation.y + 13 /*(robotSize.height / 2) - (sensorSize.height / 2)*/);
+		
 		sensorSize = new Dimension(6, 6);
-		sensorLocation = new Point(robotLocation.x + 13 /* TODO */, robotLocation.y + 13 /*(robotSize.height / 2) - (sensorSize.height / 2)*/);
+		sensorLocation = sensorStartLocation;
 		sensorColor = Color.BLUE;
 		
 		this.image = image;
@@ -43,7 +47,7 @@ public class Robot_Simulation {
 		network.setSensorInput(isBlack());
 		network.calculate();
 		helpToMove(network.getSpeedA(), network.getSpeedB());
-		network.modifyWeights(isBlack());
+		network.modifyWeights(isBlack(), sensorStartLocation, sensorLocation);
 	}
 	
 	public void helpToMove (double speedA, double speedB) throws Exception {

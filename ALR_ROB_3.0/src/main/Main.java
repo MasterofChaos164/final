@@ -17,8 +17,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		try {
-			//image = ImageIO.read(new File("/home/lukas/black_white.png")); //Linux
-			image = ImageIO.read(new File("D:\\black_white.png")); // Windows
+			image = ImageIO.read(new File("/home/lukas/black_white.png")); //Linux
+			//image = ImageIO.read(new File("D:\\black_white.png")); // Windows
 		} catch (IOException e) {
 			System.out.println("Image not found");
 			e.printStackTrace();
