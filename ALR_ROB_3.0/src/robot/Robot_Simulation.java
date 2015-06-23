@@ -17,55 +17,71 @@ public class Robot_Simulation {
 	private Dimension sensorSize;
 	private Color sensorColor;
 	
+	private Point robotStartLocation;
+	private Point sensorStartLocation;
+	
 	private BufferedImage image;
+
+	private int black = 1, white = 1;
+	
+	public float w1, bias1, w2, bias2;
+
+	private double speedA, speedB;
+	
+	private double fitness, lastFitness = 0;
 	
 	// Anzahl der Schritte pro Sekunde
 	private static final int speed = 5;
 	
-	private Network network;
 	
 	public Robot_Simulation(BufferedImage image) {
+		
+		robotStartLocation = new Point (30, 160);
+		sensorStartLocation = new Point (robotStartLocation.x + 20, robotStartLocation.y + 10);
 
 		robotSize = new Dimension(20,20);
-		robotLocation = new Point(50, 130);
+		robotLocation = robotStartLocation;
 		robotColor = Color.GREEN;
 		
 		sensorSize = new Dimension(6, 6);
-		sensorLocation = new Point(robotLocation.x + 13 /* TODO */, robotLocation.y + 13 /*(robotSize.height / 2) - (sensorSize.height / 2)*/);
+		sensorLocation = sensorStartLocation;
 		sensorColor = Color.BLUE;
 		
-		this.image = image;
+		randomWeights();
 		
-		network = new Network(isBlack());
+		this.image = image;
 	}
 	
 	public void startRobot() throws Exception{
-		network.setSensorInput(isBlack());
-		network.calculate();
-		helpToMove(network.getSpeedA(), network.getSpeedB());
-		network.modifyWeights(isBlack());
+		lastFitness = fitness;
+		speedA = (bias1 + w1 * white/black);
+		speedB = (bias2 + w2 * black/white);
+		helpToMove(speedA, speedB);
+		fitness = getFitness();
 	}
 	
 	public void helpToMove (double speedA, double speedB) throws Exception {
 		
-//		if (speedA > speedB) {
-////			speedA /= speedB;
-////			speedA *= 9;
-////			rotateRobot(speedA);
-//			rotateRobot(speedA * 90);
-//		}
-//		else if (speedA < speedB) {
-//			speedB /= speedA;
-//			speedB *= 9;
-//			rotateRobot(-speedB);
-//		}
-		rotateRobot(speedA * 90);
-		rotateRobot(-speedB * 90);
-		moveRobotForMS(300);
+		for (int i = 0; i < 10; i++) {
+			if (speedB > speedA)
+				rotateRobot(-3 * (speedB / speedA));
+			else if (speedA > speedB)
+				rotateRobot(3 * (speedA / speedB));
+			moveRobotForMS(300);
+		}
 	}
 	
 	public boolean isBlack() {
-		return new Color(image.getRGB(getSensorLocation().x, getSensorLocation().y)).equals(new Color(0, 0, 0));
+		Color color = new Color(1,1,1);
+		try {
+			color = new Color(image.getRGB(getSensorLocation().x, getSensorLocation().y));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			robotLocation = robotStartLocation;
+			sensorLocation = sensorStartLocation;
+		}
+		
+		
+		return color.equals(new Color(0, 0, 0));
 	}
 	
 	public void moveRobotForMS(double ms) throws Exception {
@@ -92,7 +108,13 @@ public class Robot_Simulation {
 		// Setzt Roboter und Sensor auf ihre neue Position
 		moveRobotInDirection(xLength, yLength);
 		moveSensorInDirection(xLength, yLength);
-		Thread.sleep(100);
+		
+		
+		// 561 861
+		if (getSensorLocation().x < 0 || getSensorLocation().x > image.getWidth() || getSensorLocation().y < 0 ||getSensorLocation().y > image.getHeight()) {
+			robotLocation = robotStartLocation;
+			sensorLocation = sensorStartLocation;
+		}
 	}
 	
 	public void rotateRobot(double angle) throws Exception {
@@ -146,5 +168,36 @@ public class Robot_Simulation {
 	
 	public Color getSensorColor() {
 		return sensorColor;
+	}
+	
+	public double getFitness() {
+		return fitness;
+	}
+	public void setFitness(double fitness) {
+		this.fitness = fitness;
+	}
+	
+	public double getLastFitness() {
+		return lastFitness;
+	}
+	
+	public void setLastFitness(double lastFitness) {
+		this.lastFitness = lastFitness;
+	}
+
+	public double calculateFitness() {
+		if (isBlack() == true)
+			black++;
+		else
+			white++;
+		double abstand = Math.sqrt(Math.pow(sensorLocation.getX() - sensorStartLocation.getX(), 2) + Math.pow(sensorLocation.getY() - sensorStartLocation.getY(), 2));
+		return Math.abs((abstand / (black - white)));
+	}
+	
+	private void randomWeights() {
+		w1 = (float) Math.random();
+		bias1 = (float) Math.random();
+		w2 = (float) Math.random();
+		bias2 = (float) Math.random();
 	}
 }

@@ -1,19 +1,19 @@
 package network;
 
-import robot.Robot_Simulation2;
+import robot.Robot_Simulation;
 
 public class Evolution {
 
-	private Robot_Simulation2[] robot;
-	private Robot_Simulation2[] newRobot;
+	private Robot_Simulation[] robot;
+	private Robot_Simulation[] newRobot;
 
 	private final double crossoverRate = 0.6;
 	private final double selectionRate = (1 - crossoverRate) * 10;
 	private final double mutationRate = 0.2;
 
-	public Robot_Simulation2[] evolve(Robot_Simulation2[] robot) {
+	public Robot_Simulation[] evolve(Robot_Simulation[] robot) {
 		this.robot = robot;
-		newRobot = new Robot_Simulation2[robot.length];
+		newRobot = new Robot_Simulation[robot.length];
 		selection();
 		crossover();
 		mutation();
@@ -37,7 +37,7 @@ public class Evolution {
 	}
 
 	private void crossover() {
-		Robot_Simulation2[] temp = new Robot_Simulation2[(int) (crossoverRate * robot.length)];
+		Robot_Simulation[] temp = new Robot_Simulation[(int) (crossoverRate * robot.length)];
 		int minFitness = 0;
 		for (int i = 0; i < robot.length; i++) {
 			if (i < 6)

@@ -39,11 +39,19 @@ public class Robot_Simulation2 {
 		randomWeights();
 		speedA = (bias1 + w1 * white/black);
 		speedB = (bias2 + w2 * black/white);
-		helpToMove();
+		moveRobot();
 		lastFitness = fitness;
 	}
 	
-	public void helpToMove () throws Exception {
+	public boolean isBlack() {
+		return new Color(image.getRGB(getRobotLocation().x, getRobotLocation().y)).equals(new Color(0, 0, 0));
+	}
+	
+	public void moveRobot() {
+		//Bewegung 10 mal ausführen
+		int xDirection = 1, yDirection = 1;
+		
+		double verhältnis = speedA / speedB;
 		
 		if (speedA > speedB) {
 			speedB /= speedA;
@@ -55,17 +63,6 @@ public class Robot_Simulation2 {
 		
 		speedA *= speed;
 		speedB *= speed;
-		
-		moveRobot();
-	}
-	
-	public boolean isBlack() {
-		return new Color(image.getRGB(getRobotLocation().x, getRobotLocation().y)).equals(new Color(0, 0, 0));
-	}
-	
-	public void moveRobot() {
-		//Bewegung 10 mal ausführen
-		int xDirection, yDirection;
 		
 		if (robot.x1 < robot.x2 && robot.y1 < robot.y2) {
 			xDirection = 1;
@@ -82,6 +79,11 @@ public class Robot_Simulation2 {
 		else if (robot.x1 > robot.x2 && robot.y1 > robot.y2) {
 			xDirection = -1;
 			yDirection = 1;
+		}
+		
+		if (speedB > speedA) {
+			robot.x1 += speedA * xDirection;
+			robot.y1 += speedA * yDirection;
 		}
 		
 		// x1 + SpeedA * xDirection

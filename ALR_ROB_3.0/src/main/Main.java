@@ -7,11 +7,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import network.Evolution;
+import robot.Robot_Simulation;
 import robot.Robot_Simulation2;
 
 public class Main {
 
-	private static Robot_Simulation2[] robot;
+	private static Robot_Simulation[] robot;
 	private static RobotUI window;
 	private static BufferedImage image;
 	private static Evolution evolution;
@@ -28,24 +29,26 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		robot = new Robot_Simulation2[population];
+		robot = new Robot_Simulation[population];
 		evolution = new Evolution();
 		
 		for (int i = 0; i< population; i++)
-			robot[i] = new Robot_Simulation2(image);
+			robot[i] = new Robot_Simulation(image);
 		
 		window = new RobotUI(robot[0], image);
 
 		while (true) {
 			for (int i = 0; i < 10; i++) {
-				window.setRobot(robot[i]);
-				try {
-					robot[i].startRobot();
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+				for (int j = 0; j < 100; j++) {
+					window.setRobot(robot[i]);
+					try {
+						robot[i].startRobot();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+					robot[i].calculateFitness();
+					window.repaint();
 				}
-				
-				window.repaint();
 			}
 			robot = evolution.evolve(robot); // TODO Rückgabe
 			
