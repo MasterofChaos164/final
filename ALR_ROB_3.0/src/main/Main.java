@@ -22,8 +22,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		try {
-			image = ImageIO.read(new File("/home/lukas/black_white.png")); //Linux
-			//image = ImageIO.read(new File("D:\\black_white.png")); // Windows
+			//image = ImageIO.read(new File("/home/lukas/black_white.png")); //Linux
+			image = ImageIO.read(new File("E:\\black_white.png")); // Windows
 		} catch (IOException e) {
 			System.out.println("Image not found");
 			e.printStackTrace();
@@ -48,6 +48,12 @@ public class Main {
 					}
 					robot[i].calculateFitness();
 					window.repaint();
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			robot = evolution.evolve(robot); // TODO Rückgabe

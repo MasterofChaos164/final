@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.peer.RobotPeer;
 
 import network.Network;
 
@@ -28,6 +29,8 @@ public class Robot_Simulation {
 
 	private double speedA, speedB;
 	
+	private double alpha;
+	
 	private double fitness, lastFitness = 0;
 	
 	// Anzahl der Schritte pro Sekunde
@@ -47,6 +50,8 @@ public class Robot_Simulation {
 		sensorLocation = sensorStartLocation;
 		sensorColor = Color.BLUE;
 		
+		alpha = 0;
+		
 		randomWeights();
 		
 		this.image = image;
@@ -62,13 +67,21 @@ public class Robot_Simulation {
 	
 	public void helpToMove (double speedA, double speedB) throws Exception {
 		
-		for (int i = 0; i < 10; i++) {
-			if (speedB > speedA)
-				rotateRobot(-3 * (speedB / speedA));
-			else if (speedA > speedB)
-				rotateRobot(3 * (speedA / speedB));
-			moveRobotForMS(300);
+		double deltaAlpha = (speedA - speedB) / getRobotSize().width;
+		double deltaS = (speedA + speedB) / 2;
+		double deltaX = 0, deltaY = 0;
+		if (speedA == speedB) {
+			deltaX = speedA * Math.cos(deltaAlpha);
+			deltaY = speedB * Math.sin(deltaAlpha);
+		} else if (-speedA != speedB && speedA != 0) {
+			deltaX = (deltaS / deltaAlpha) * (Math.cos((Math.PI / 2) + alpha - deltaAlpha) + Math.cos(alpha - (Math.PI / 2)));
+			deltaY = (deltaS / deltaAlpha) * (Math.sin((Math.PI / 2) + alpha - deltaAlpha) + Math.sin(alpha - (Math.PI / 2)));
 		}
+		
+		alpha += deltaAlpha;
+		
+		moveRobotInDirection(deltaX, deltaY);
+		moveSensorInDirection(deltaX, deltaY);
 	}
 	
 	public boolean isBlack() {
@@ -78,9 +91,7 @@ public class Robot_Simulation {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			robotLocation = robotStartLocation;
 			sensorLocation = sensorStartLocation;
-		}
-		
-		
+		}	
 		return color.equals(new Color(0, 0, 0));
 	}
 	
