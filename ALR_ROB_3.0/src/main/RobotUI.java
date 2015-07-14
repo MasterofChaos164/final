@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -45,7 +47,7 @@ public class RobotUI extends JPanel{
 		super.paintComponent(g);
 		drawBackground(g);
 		drawRobot(g);
-		drawSensor(g);
+//		drawSensor(g);
 	}
 	
 	public void drawBackground(Graphics g) {
@@ -53,13 +55,22 @@ public class RobotUI extends JPanel{
 	}
 	
 	public void drawRobot(Graphics g) {
-		g.setColor(robot.getRobotColor());
-		//g.drawLine((int)robot.getRobot().x1, (int)robot.getRobot().y1, (int)robot.getRobot().x2, (int)robot.getRobot().y2);
-		g.fillOval(robot.getRobotLocation().x, robot.getRobotLocation().y, robot.getRobotSize().width, robot.getRobotSize().height);
+		
+		Graphics2D graphic = (Graphics2D) g;
+		graphic.setColor(robot.getRobotColor());
+		Rectangle rectangle = new Rectangle(robot.getRobotLocation().x, robot.getRobotLocation().y, robot.getRobotSize().width, robot.getRobotSize().height);
+		
+		//graphic.rotate(robot.getAlpha()); //TODO
+		graphic.rotate(robot.getAlpha(), robot.getRobotLocation().x + robot.getRobotSize().width / 2, robot.getRobotLocation().y + robot.getRobotSize().height / 2);
+		graphic.draw(rectangle);
+		graphic.fill(rectangle);
+		
+//		g.setColor(robot.getRobotColor());
+//		g.fillRect(robot.getRobotLocation().x, robot.getRobotLocation().y, robot.getRobotSize().width, robot.getRobotSize().height);
 	}
 	
-	public void drawSensor(Graphics g) {
-		g.setColor(robot.getSensorColor());
-		g.fillOval(robot.getSensorLocation().x, robot.getSensorLocation().y, robot.getSensorSize().width, robot.getSensorSize().height);
-	}
+//	public void drawSensor(Graphics g) {
+//		g.setColor(robot.getSensorColor());
+//		g.fillOval(robot.getSensorLocation().x, robot.getSensorLocation().y, robot.getSensorSize().width, robot.getSensorSize().height);
+//	}
 }
