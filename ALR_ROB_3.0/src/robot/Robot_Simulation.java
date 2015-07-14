@@ -59,14 +59,21 @@ public class Robot_Simulation {
 	
 	public void startRobot() throws Exception{
 		lastFitness = fitness;
-		speedA = (bias1 + w1 * white/black);
-		speedB = (bias2 + w2 * black/white);
-		helpToMove(speedA, speedB);
+		double whiteBlack = white/black;
+		double blackWhite = black/white;
+		
+		if (whiteBlack > 10)
+			whiteBlack = 10;
+		if (blackWhite > 10)
+			blackWhite = 10;
+		
+		speedA = (bias1 + w1 * whiteBlack);
+		speedB = (bias2 + w2 * blackWhite);
+		helpToMove(speedA * 10, speedB * 10);
 		fitness = getFitness();
 	}
 	
 	public void helpToMove (double speedA, double speedB) throws Exception {
-		
 		double deltaAlpha = (speedA - speedB) / getRobotSize().width;
 		double deltaS = (speedA + speedB) / 2;
 		double deltaX = 0, deltaY = 0;
@@ -74,7 +81,7 @@ public class Robot_Simulation {
 			deltaX = speedA * Math.cos(deltaAlpha);
 			deltaY = speedB * Math.sin(deltaAlpha);
 		} else if (-speedA != speedB && speedA != 0) {
-			deltaX = (deltaS / deltaAlpha) * (Math.cos((Math.PI / 2) + alpha - deltaAlpha) + Math.cos(alpha - (Math.PI / 2)));
+			deltaX = (deltaS / deltaAlpha) * (Math.cos((Math.PI / 2) + alpha - deltaAlpha) + Math.cos(alpha - (Math.PI / 2))); // 
 			deltaY = (deltaS / deltaAlpha) * (Math.sin((Math.PI / 2) + alpha - deltaAlpha) + Math.sin(alpha - (Math.PI / 2)));
 		}
 		
@@ -202,7 +209,10 @@ public class Robot_Simulation {
 		else
 			white++;
 		double abstand = Math.sqrt(Math.pow(sensorLocation.getX() - sensorStartLocation.getX(), 2) + Math.pow(sensorLocation.getY() - sensorStartLocation.getY(), 2));
-		return Math.abs((abstand / (black - white)));
+		if (black > white)
+			return Math.abs((abstand / (black - white)));
+		else
+			return Math.abs((abstand/ (white - black)));
 	}
 	
 	private void randomWeights() {

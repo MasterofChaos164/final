@@ -36,10 +36,12 @@ public class Main {
 			robot[i] = new Robot_Simulation(image);
 		
 		window = new RobotUI(robot[0], image);
-
+		
+		double counter = 100000;
+		
 		while (true) {
 			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < 100; j++) {
+				for (int j = 0; j < 1000; j++) {
 					window.setRobot(robot[i]);
 					try {
 						robot[i].startRobot();
@@ -48,23 +50,20 @@ public class Main {
 					}
 					robot[i].calculateFitness();
 					window.repaint();
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					//if (counter == 0) {
+						try {
+							Thread.sleep(200);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+//					}
+//					else
+//						counter--;
+//					System.out.println(counter);
 				}
 			}
 			robot = evolution.evolve(robot); // TODO Rückgabe
-			
-			
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 }
