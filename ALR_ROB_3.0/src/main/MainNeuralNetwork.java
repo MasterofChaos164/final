@@ -19,14 +19,7 @@ public class MainNeuralNetwork {
 	
 	public static void main(String[] args) {
 		trainingSets = new TrainingSets();
-
-		try {
-			//image = ImageIO.read(new File("/home/lukas/black_white.png")); //Linux
-			image = ImageIO.read(new File("E:\\black_white.png")); // Windows
-		} catch (IOException e) {
-			System.out.println("Image not found");
-			e.printStackTrace();
-		}
+		image = trainingSets.line01Image;
 		
 		robot = new Robot_Simulation(new Point (100, 100));
 		window = new RobotUI(robot, image);

@@ -28,7 +28,7 @@ public class RobotUI extends JPanel{
 		
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Neural Network");
+		frame.setTitle("Learning Robot");
 		frame.setLocationRelativeTo(null);
 		frame.setLocation(frame.getX()-frame_width/2,frame.getY()-frame_height/2);
 		frame.add(this);
@@ -47,7 +47,7 @@ public class RobotUI extends JPanel{
 		super.paintComponent(g);
 		drawBackground(g);
 		drawRobot(g);
-//		drawSensor(g);
+		drawSensor(g);
 	}
 	
 	public void drawBackground(Graphics g) {
@@ -69,8 +69,16 @@ public class RobotUI extends JPanel{
 //		g.fillRect(robot.getRobotLocation().x, robot.getRobotLocation().y, robot.getRobotSize().width, robot.getRobotSize().height);
 	}
 	
-//	public void drawSensor(Graphics g) {
+	public void drawSensor(Graphics g) {
+		
+		Graphics2D g2d = (Graphics2D) g;
+		
+		g2d.setColor(robot.getSensorColor());
+	    g2d.fillOval(robot.getSensorLocation().x, robot.getSensorLocation().y, robot.getSensorSize().width, robot.getSensorSize().height);
+	    g2d.rotate(robot.getAlpha(), robot.getSensorLocation().x + robot.getSensorSize().width / 2, robot.getSensorLocation().y + robot.getSensorSize().height / 2);
+	   
+		
 //		g.setColor(robot.getSensorColor());
 //		g.fillOval(robot.getSensorLocation().x, robot.getSensorLocation().y, robot.getSensorSize().width, robot.getSensorSize().height);
-//	}
+	}
 }

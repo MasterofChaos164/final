@@ -11,7 +11,7 @@ import java.util.Vector;
 
 public class TextFileAdapter {
 	
-	public static final String relativOutputPath = "Training Sets/txt/";
+	public static final String relativOutputPath = "res/";
 	private static String absolutProjectPath;
 	private static String absolutOutputPath;
 	

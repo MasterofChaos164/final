@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 public class ImageAdapter {
 
-	public static final String relativOutputPath = "Training Sets/graphics/";
+	public static final String relativOutputPath = "res/";
 	private static String absolutProjectPath;
 	private static String absolutOutputPath;
 	private static final String[] mimeTypes = { ".bmp", ".gif", ".jpg", ".png", ".tif" };

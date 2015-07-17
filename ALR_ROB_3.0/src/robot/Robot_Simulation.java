@@ -10,12 +10,12 @@ public class Robot_Simulation {
 	private Dimension robotSize;
 	private Color robotColor;
 	
-//	private Point sensorLocation;
-//	private Dimension sensorSize;
-//	private Color sensorColor;
+	private Point sensorLocation;
+	private Dimension sensorSize;
+	private Color sensorColor;
 	
 	private Point robotStartLocation;
-//	private Point sensorStartLocation;
+	private Point sensorStartLocation;
 	
 	private double alpha;
 	
@@ -26,15 +26,16 @@ public class Robot_Simulation {
 	public Robot_Simulation(Point startLocation) {
 		
 		robotStartLocation = startLocation;
-//		sensorStartLocation = new Point (robotStartLocation.x + 20, robotStartLocation.y + 10);
-
 		robotSize = new Dimension(20,20);
 		robotLocation = robotStartLocation;
 		robotColor = Color.GREEN;
-		
-//		sensorSize = new Dimension(6, 6);
-//		sensorLocation = sensorStartLocation;
-//		sensorColor = Color.BLUE;
+
+		sensorSize = new Dimension(6, 6);
+		int sensorStartLocationX = (int)(robotStartLocation.x + robotSize.getWidth());
+		int sensorStartLocationY = (int)(robotStartLocation.y + robotSize.getHeight()/2.0-sensorSize.getHeight()/2.0);
+		sensorStartLocation = new Point(sensorStartLocationX, sensorStartLocationY);
+		sensorLocation = sensorStartLocation;
+		sensorColor = Color.BLUE;
 		
 		alpha = 0;
 	}
@@ -53,6 +54,7 @@ public class Robot_Simulation {
 		
 		alpha += deltaAlpha;
 		moveRobotInDirection(deltaX, deltaY);
+		moveSensorInDirection(deltaX, deltaY);
 	}
 	
 //	public void rotateRobot(double angle) throws Exception {
@@ -84,29 +86,29 @@ public class Robot_Simulation {
 		return robotLocation;
 	}
 	
-//	private void moveSensorInDirection(double xLength, double yLength) {
-//		sensorLocation.setLocation(sensorLocation.getX() + xLength, sensorLocation.getY() + yLength);		
-//	}
-//	
-//	public Point getSensorLocation() {
-//		return sensorLocation;
-//	}
+	private void moveSensorInDirection(double xLength, double yLength) {
+		sensorLocation.setLocation(sensorLocation.getX() + xLength, sensorLocation.getY() + yLength);		
+	}
+	
+	public Point getSensorLocation() {
+		return sensorLocation;
+	}
 	
 	public Dimension getRobotSize() {
 		return robotSize;
 	}
 	
-//	public Dimension getSensorSize() {
-//		return sensorSize;
-//	}
+	public Dimension getSensorSize() {
+		return sensorSize;
+	}
 	
 	public Color getRobotColor() {
 		return robotColor;
 	}
 	
-//	public Color getSensorColor() {
-//		return sensorColor;
-//	}
+	public Color getSensorColor() {
+		return sensorColor;
+	}
 	
 	public double getAlpha() {
 		return alpha;

@@ -7,14 +7,8 @@ import java.util.Vector;
 
 public class TrainingSets {
 	
-	public static final String twoBoxesFileName = "twoBoxes.png";
-	public BufferedImage twoBoxesImage;
-	public int[][] twoBoxesRGBSet;
-	public int[][] twoBoxesSet;
-	
-	public static final String exOrFileName = "exOr.txt";
-	public String exOrSetString;
-	public int[][] exOrSet;
+	public static final String line01FileName = "black_white.png";
+	public BufferedImage line01Image;
 	
 	public TrainingSets() {
 		initialize();
@@ -28,7 +22,7 @@ public class TrainingSets {
 	
 	public void generate() {
 		generateSetTwoBoxes();
-		generateSetExOr();
+//		generateSetExOr();
 		
 //		System.out.println("\nresult1 in RGB\n");
 //		System.out.println("Length: "+twoBoxesRGBSet.length+", Length[0]: "+twoBoxesRGBSet[0].length);
@@ -44,8 +38,8 @@ public class TrainingSets {
 	}
 	
 	public void generateSetTwoBoxes() {
-		twoBoxesImage = ImageAdapter.readImage(twoBoxesFileName);
-		twoBoxesRGBSet = ImageAdapter.getPixelsOf(twoBoxesImage);
+		line01Image = ImageAdapter.readImage(line01FileName);
+//		twoBoxesRGBSet = ImageAdapter.getPixelsOf(line01Image);
 		
 //		String set = "";
 //		int numSets = twoBoxesRGBSet.length*twoBoxesRGBSet[0].length;
