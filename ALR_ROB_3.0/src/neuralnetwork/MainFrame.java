@@ -39,57 +39,45 @@ public class MainFrame extends JFrame {
 	private int numHiddens;
 	private int numOutputs;
 	private int MDims; // Matrix Dimensions
-
-	/**
-	 * Main
-	 */
-	public static void main(String[] args) {
-		new MainFrame(args);
-	}
 	
 	/**
 	 * @brief: Constructor: Creates the frame and canvas and runs the further program
 	 */
 	public MainFrame(String[] args) {
-		super("Neural Network Output");
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setLocation(getX() - frameWidth / 2, getY() - frameHeight / 2);
-		setVisible(true);
-		setLayout(null);
-		int horizontalInsets = getInsets().right;
-		int verticalInsets = getInsets().top + getInsets().bottom;
-		setSize(frameWidth + horizontalInsets, frameHeight + verticalInsets);
-
-		canvas.img = createImage(imageWidth, imageHeight);
-		canvas.setLocation((frameWidth - getInsets().left - imageWidth) / 2,
-				(frameHeight - imageHeight) / 2);
-		canvas.setSize(imageWidth, imageHeight);
-		add(canvas);
-
-		run();
-	}
-
-	/**
-	 * @brief: run method calls my Main and puts the results on the screen
-	 */
-	public void run() {
 		initialization();
-		calculateLeastSquaresOptimum();
-		drawMap();
-		repaint();
 	}
 	
 	/**
 	 * @brief: initialization
 	 */
 	public void initialization() {
-		numInputs = 3;
+		experienceTable = new double[1][3];
+		
+		numInputs = 2;
 		numHiddens = 6;
 		numOutputs = 1;
 		bias = 1.0;
 		net = new Network(numInputs, numHiddens, numOutputs);
+	}
+	
+	public void noticeSensorDetection(double value) {
+		double[][] experienceTableOld = new double[experienceTable.length][experienceTable[0].length];
+		for (int experienceNum=0; experienceNum < experienceTable.length; experienceNum++) {
+			for(int i=0; i < experienceTable[0].length; i++) {
+				experienceTableOld[experienceNum][i] = experienceTable[experienceNum][i];
+			}
+		}
+		
+		experienceTable = new double[experienceTable.length+1][experienceTable[0].length];
+		for(int experienceNum = 0; experienceNum < experienceTable.length; experienceNum++) {
+			for(int i=0; i < experienceTable[0].length; i++) {
+				experienceTable[experienceNum][i] = experienceTableOld[experienceNum][i];
+			}
+		}
+
+		experienceTable[experienceTable.length][0] = bias;
+		experienceTable[experienceTable.length][1] = value;
+		experienceTable[experienceTable.length][2] = value;
 	}
 
 	/**
@@ -223,7 +211,6 @@ public class MainFrame extends JFrame {
 //			}
 //		}
 //		System.out.println("\nError am Ende: " + getSumQuadError());
-		
 	}
 
 	public void calculateOutputWeigths() {
