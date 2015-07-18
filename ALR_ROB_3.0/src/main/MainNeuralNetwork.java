@@ -39,6 +39,10 @@ public class MainNeuralNetwork {
 			// Roboter neu zeichnen
 			window.repaint();
 			
+			Point sensorLocation = robot.getSensorLocation();
+			int rgb = trainingSets.line01RGBSet[sensorLocation.y][sensorLocation.x];
+			System.out.println("Wert: "+rgb);
+			
 			// Kurze Pause um die Visualisierung besser nachvollziehen zu können
 			try {
 				Thread.sleep(200);
