@@ -32,18 +32,18 @@ public class MainFrame extends JFrame {
 	ImagePanel canvas = new ImagePanel();
 	public InputOutput inputOutput = new InputOutput(this);
 
-	private Network net;
+	public Network net;
 	private double[][] experienceTable;
 	private double bias;
 	private int numInputs;
-	private int numHiddens;
+	public int numHiddens;
 	private int numOutputs;
 	private int MDims; // Matrix Dimensions
 	
 	/**
 	 * @brief: Constructor: Creates the frame and canvas and runs the further program
 	 */
-	public MainFrame(String[] args) {
+	public MainFrame() {
 		initialization();
 	}
 	
@@ -61,23 +61,27 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void noticeSensorDetection(double value) {
-		double[][] experienceTableOld = new double[experienceTable.length][experienceTable[0].length];
-		for (int experienceNum=0; experienceNum < experienceTable.length; experienceNum++) {
-			for(int i=0; i < experienceTable[0].length; i++) {
-				experienceTableOld[experienceNum][i] = experienceTable[experienceNum][i];
+		if(experienceTable != null) {
+			double[][] experienceTableOld = new double[experienceTable.length][experienceTable[0].length];
+			for (int experienceNum=0; experienceNum < experienceTable.length; experienceNum++) {
+				for(int i=0; i < experienceTable[0].length; i++) {
+					experienceTableOld[experienceNum][i] = experienceTable[experienceNum][i];
+				}
 			}
-		}
-		
-		experienceTable = new double[experienceTable.length+1][experienceTable[0].length];
-		for(int experienceNum = 0; experienceNum < experienceTable.length; experienceNum++) {
-			for(int i=0; i < experienceTable[0].length; i++) {
-				experienceTable[experienceNum][i] = experienceTableOld[experienceNum][i];
+			
+			experienceTable = new double[experienceTable.length+1][experienceTable[0].length];
+			for(int experienceNum = 0; experienceNum < experienceTable.length-1; experienceNum++) {
+				for(int i=0; i < experienceTable[0].length; i++) {
+					experienceTable[experienceNum][i] = experienceTableOld[experienceNum][i];
+				}
 			}
+		} else {
+			experienceTable = new double[1][3];
 		}
 
-		experienceTable[experienceTable.length][0] = bias;
-		experienceTable[experienceTable.length][1] = value;
-		experienceTable[experienceTable.length][2] = value;
+		experienceTable[experienceTable.length-1][0] = bias;
+		experienceTable[experienceTable.length-1][1] = value;
+		experienceTable[experienceTable.length-1][2] = value;
 	}
 
 	/**
