@@ -57,26 +57,10 @@ public class Robot_Simulation {
 		moveSensorInDirection(deltaX, deltaY);
 	}
 	
-//	public void rotateRobot(double angle) throws Exception {
-//		
-//		// Macht keinen Sinn sich im Kreis zu drehen
-//		if (angle < -360 || angle > 360)
-//			throw new Exception("Exception: Angle out of range!");
-//		
-//		// Transform into radiant value
-//		double radiantAngle = (angle * Math.PI) / 180;
-//				
-//		double robotCenterX = robotLocation.getX() + robotSize.getWidth() / 2;
-//		double robotCenterY = robotLocation.getY() + robotSize.getHeight() / 2;
-//		
-//		double sensorCenterX = sensorLocation.getX() + sensorSize.getWidth() / 2;
-//		double sensorCenterY = sensorLocation.getY() + sensorSize.getHeight() / 2;
-//		
-//		double xNew = robotCenterX + (sensorCenterX - robotCenterX) * Math.cos(radiantAngle) - (sensorCenterY - robotCenterY) * Math.sin(radiantAngle);
-//		double yNew = robotCenterY + (sensorCenterX - robotCenterX) * Math.sin(radiantAngle) + (sensorCenterY - robotCenterY) * Math.cos(radiantAngle);
-//		
-//		sensorLocation.setLocation(xNew - (sensorSize.getWidth() / 2), yNew - (sensorSize.getHeight() / 2));
-//	}
+	public void resetRobot() {
+		robotLocation = robotStartLocation;
+		sensorLocation = sensorStartLocation;
+	}
 	
 	private void moveRobotInDirection(double xLength, double yLength) {
 		robotLocation.setLocation(robotLocation.getX() + xLength, robotLocation.getY() + yLength);
