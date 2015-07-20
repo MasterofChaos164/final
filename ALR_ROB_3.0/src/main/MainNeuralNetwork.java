@@ -19,10 +19,12 @@ public class MainNeuralNetwork {
 	private static Robot_Simulation robot;
 	private static RobotUI window;
 	private static BufferedImage image;
+	private static double oldAlpha;
+	private static Point oldSensorLocation;
 	
 	public static void main(String[] args) {
 		Point sensorLocation;
-		double value;
+		double value = -2; //Just for initialization
 		double speedA, speedB;
 		double output;
 		
@@ -30,12 +32,41 @@ public class MainNeuralNetwork {
 		mainFrame = new MainFrame();
 		image = trainingSets.line01Image;
 		
-		robot = new Robot_Simulation(new Point (100, 100));
+		robot = new Robot_Simulation(new Point (100, 155));
 		window = new RobotUI(robot, image);
-		// Lernverfahren einfügen
+		oldSensorLocation = new Point(robot.getSensorLocation().x,robot.getSensorLocation().y);
 		
 		while (true) {
 			sensorLocation = robot.getSensorLocation();
+			
+			if(sensorLocation.x >= trainingSets.line01RGBSet[0].length) {
+				robot.setRobotX(robot.getRobotLocation().x - trainingSets.line01RGBSet[0].length);
+				robot.setSensorX(robot.getSensorLocation().x - trainingSets.line01RGBSet[0].length);
+				continue;
+			}
+			
+			if(sensorLocation.x < 0) {
+				robot.setRobotX(robot.getRobotLocation().x + trainingSets.line01RGBSet[0].length-1);
+				robot.setSensorX(robot.getSensorLocation().x + trainingSets.line01RGBSet[0].length-1);
+				continue;
+			}
+			
+			if(sensorLocation.y >= trainingSets.line01RGBSet.length) {
+				robot.setRobotY(robot.getRobotLocation().y - trainingSets.line01RGBSet.length);
+				robot.setSensorY(robot.getSensorLocation().y - trainingSets.line01RGBSet.length);
+				continue;
+			}
+			
+			if(sensorLocation.y < 0) {
+				robot.setRobotY(robot.getRobotLocation().y + trainingSets.line01RGBSet.length-1);
+				robot.setSensorY(robot.getSensorLocation().y + trainingSets.line01RGBSet.length-1);
+				continue;
+			}
+			
+			if(trainingSets.line01RGBSet[oldSensorLocation.y][oldSensorLocation.x] != trainingSets.line01RGBSet[sensorLocation.y][sensorLocation.x]) {
+				oldAlpha = robot.getAlpha();
+			}
+			
 			value = (trainingSets.line01RGBSet[sensorLocation.y][sensorLocation.x] == -1)? -0.999999999 : 0.999999999;
 			System.out.println("Wert: "+value);
 			
@@ -45,15 +76,17 @@ public class MainNeuralNetwork {
 			
 			output = mainFrame.net.neuron[mainFrame.numHiddens].output;
 			System.out.println("output: "+output);
-			if(output < 0) {
-				//-1.0 => Rechtskurve
+
+			if(robot.getAlpha() > oldAlpha+Math.PI) {
+				robot.setAlpha(oldAlpha);
 				speedA = MAX_SPEED;
-				speedB = MAX_SPEED/5*4+MAX_SPEED/5*(1+output);
-			} else {
-				//1.0 => Linkskurve
-				speedA = MAX_SPEED/5*4+MAX_SPEED/5*(1-output);
 				speedB = MAX_SPEED;
+			} else {
+				speedA = MAX_SPEED*(1-output);
+				speedB = MAX_SPEED*(1+output);
 			}
+			
+			oldSensorLocation = new Point(sensorLocation.x, sensorLocation.y);
 			
 			try {
 				robot.moveRobot(speedA, speedB);
@@ -61,7 +94,7 @@ public class MainNeuralNetwork {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
+			
 			// Roboter neu zeichnen
 			window.repaint();
 			

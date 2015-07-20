@@ -73,12 +73,40 @@ public class Robot_Simulation {
 		return robotLocation;
 	}
 	
+	public void setRobotLocation(Point robotLocation) {
+		this.robotLocation = robotLocation;
+	}
+	
 	private void moveSensorInDirection(double xLength, double yLength) {
 		sensorLocation.setLocation(sensorLocation.getX() + xLength, sensorLocation.getY() + yLength);		
 	}
 	
 	public Point getSensorLocation() {
 		return sensorLocation;
+	}
+	
+	public void setSensorLocation(Point sensorLocation) {
+		this.sensorLocation = sensorLocation;
+	}
+	
+	public void setRobotX(int xPos) {
+		this.robotLocation.x = xPos;
+	}
+	
+	public void setRobotY(int yPos) {
+		this.robotLocation.y = yPos;
+	}
+	
+	public void setSensorX(int xPos) {
+		this.sensorLocation.x = xPos;
+	}
+	
+	public void setSensorY(int yPos) {
+		this.sensorLocation.y = yPos;
+	}
+	
+	public void setRobotSize(Dimension robotSize) {
+		this.robotSize = robotSize;
 	}
 	
 	public Dimension getRobotSize() {

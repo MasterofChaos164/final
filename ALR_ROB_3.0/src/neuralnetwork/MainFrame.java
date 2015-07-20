@@ -54,7 +54,7 @@ public class MainFrame extends JFrame {
 		experienceTable = new double[1][3];
 		
 		numInputs = 2;
-		numHiddens = 6;
+		numHiddens = 12;
 		numOutputs = 1;
 		bias = 1.0;
 		net = new Network(numInputs, numHiddens, numOutputs);
