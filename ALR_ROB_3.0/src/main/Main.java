@@ -1,23 +1,22 @@
 package main;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import network.Evolution;
+import evolution.Evolution;
+import evolution.RobotValues;
 import robot.Robot_Simulation;
-import robot.Robot_Simulation2;
 
 public class Main {
 
-	private static Robot_Simulation[] robot;
+	private static Robot_Simulation robot;
 	private static RobotUI window;
 	private static BufferedImage image;
 	private static Evolution evolution;
-	
-	private static int population = 10;
 
 	public static void main(String[] args) {
 
@@ -29,41 +28,43 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		robot = new Robot_Simulation[population];
-		evolution = new Evolution();
+		robot = new Robot_Simulation(new Point(20, 100));
+		evolution = new Evolution(robot, 500, image);
+				
+		window = new RobotUI(robot, image);
 		
-		for (int i = 0; i< population; i++)
-			robot[i] = new Robot_Simulation(image);
+		evolution.startEvolution();
 		
-		window = new RobotUI(robot[0], image);
-		
-		double counter = 100000;
+		RobotValues value = evolution.getBestIndividuum();
 		
 		while (true) {
-			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < 1000; j++) {
-					window.setRobot(robot[i]);
-					try {
-						robot[i].startRobot();
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-					robot[i].calculateFitness();
-					window.repaint();
-					//if (counter == 0) {
-						try {
-							Thread.sleep(200);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-//					}
-//					else
-//						counter--;
-//					System.out.println(counter);
-				}
+			robot.moveRobot((value.bias1 + value.w1 * value.black / value.white) * 10, (value.bias2 + value.w2 * value.white / value.black) * 10);
+			if(robot.getSensorLocation().x >= image.getWidth()) {
+				robot.setRobotX(robot.getRobotLocation().x - image.getWidth());
+				robot.setSensorX(robot.getSensorLocation().x - image.getWidth());
 			}
-			robot = evolution.evolve(robot); // TODO Rückgabe
+			
+			if(robot.getSensorLocation().x < 0) {
+				robot.setRobotX(robot.getRobotLocation().x + image.getWidth());
+				robot.setSensorX(robot.getSensorLocation().x + image.getWidth());
+			}
+			
+			if(robot.getSensorLocation().y >= image.getHeight()) {
+				robot.setRobotY(robot.getRobotLocation().y - image.getHeight());
+				robot.setSensorY(robot.getSensorLocation().y - image.getHeight());
+			}
+			
+			if(robot.getSensorLocation().y < 0) {
+				robot.setRobotY(robot.getRobotLocation().y + image.getHeight());
+				robot.setSensorY(robot.getSensorLocation().y + image.getHeight());
+			}
+			window.repaint();
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

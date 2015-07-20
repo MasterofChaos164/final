@@ -55,6 +55,8 @@ public class Robot_Simulation {
 		alpha += deltaAlpha;
 		moveRobotInDirection(deltaX, deltaY);
 		moveSensorInDirection(deltaX, deltaY);
+		
+		
 	}
 	
 	public void resetRobot() {

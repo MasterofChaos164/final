@@ -1,5 +1,8 @@
 package evolution;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 import robot.Robot_Simulation;
 
 public class Evolution {
@@ -15,15 +18,17 @@ public class Evolution {
 	
 	private Robot_Simulation robot;
 	private double targetFitness = 0;
+	private BufferedImage image;
 	
 	/**
 	 * given start location and a target fitness which should be reached
 	 * @param startLocation
 	 * @param targetFitness
 	 */
-	public Evolution(Robot_Simulation robot, double targetFitness) {
+	public Evolution(Robot_Simulation robot, double targetFitness, BufferedImage image) {
 		this.targetFitness = targetFitness;
 		this.robot = robot;
+		this.image = image;
 		values = new RobotValues[populationSize];
 		for (int i = 0; i < populationSize; i++) {
 			values[i] = new RobotValues();
@@ -36,12 +41,46 @@ public class Evolution {
 	 */
 	public void startEvolution() {
 		RobotValues[] tempValues = new RobotValues[populationSize];
-		
+		int counter = 0;
+		int color = 0;
 		while (calculateOverallFitness() / populationSize < targetFitness) {
 			
 			for (RobotValues value : values) {
 				for (int i = 0; i < iterations; i++)
 					robot.moveRobot((value.bias1 + value.black / value.white * value.w1) * 10, (value.bias2 + value.white / value.black * value.w2) * 10);
+				robot.moveRobot((value.bias1 + value.w1 * value.black / value.white) * 10, (value.bias2 + value.w2 * value.white / value.black) * 10);
+				System.out.println("Sensor X before: " + robot.getSensorLocation().x);
+				System.out.println("Sensor Y before: " + robot.getSensorLocation().y);
+				if(robot.getSensorLocation().x >= image.getWidth()) {
+					robot.setRobotX(-robot.getRobotSize().width);
+					robot.setSensorX(1);
+				}
+				
+				if(robot.getSensorLocation().x < 0) {
+					robot.setRobotX(image.getWidth() * robot.getRobotSize().width);
+					robot.setSensorX(image.getWidth() - 1);
+				}
+				
+				if(robot.getSensorLocation().y >= image.getHeight()) {
+					robot.setRobotY(robot.getRobotSize().height);
+					robot.setSensorY(1);
+				}
+				
+				if(robot.getSensorLocation().y < 0) {
+					robot.setRobotY(image.getHeight() + robot.getRobotSize().height);
+					robot.setSensorY(image.getHeight() - 1);
+				}
+				System.out.println("Sensor X after: " + robot.getSensorLocation().x);
+				System.out.println("Sensor Y after: " + robot.getSensorLocation().y);
+				try {
+					color = image.getRGB(robot.getSensorLocation().x, robot.getSensorLocation().y);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (new Color(color).equals(new Color(0, 0, 0)))
+					value.white++;
+				else
+					value.black++;
 				value.fitness = calculateFitness(robot, value);
 				robot.resetRobot();
 			}
@@ -50,7 +89,9 @@ public class Evolution {
 			tempValues = crossover(tempValues);
 			tempValues = mutation(tempValues);
 			values = tempValues;
+			counter++;
 		}
+		System.out.println("Counter: " + counter);
 	}
 	
 	/**
@@ -59,7 +100,7 @@ public class Evolution {
 	 * @return fitness
 	 */
 	private double calculateFitness(Robot_Simulation robot, RobotValues value) {
-		int blackwhite;
+		double blackwhite;
 		if (value.black > value.white)
 			blackwhite = value.white / value.black;
 		else

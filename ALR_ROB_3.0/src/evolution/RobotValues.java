@@ -4,7 +4,7 @@ public class RobotValues {
 	
 	public float w1, w2, bias1, bias2;
 	public double fitness;
-	public int black, white;
+	public double black, white;
 	
 	public RobotValues () {
 		w1 = (float) Math.random();
