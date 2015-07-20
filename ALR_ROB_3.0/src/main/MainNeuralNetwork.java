@@ -38,7 +38,9 @@ public class MainNeuralNetwork {
 			sensorLocation = robot.getSensorLocation();
 			value = (trainingSets.line01RGBSet[sensorLocation.y][sensorLocation.x] == -1)? -0.999999999 : 0.999999999;
 			System.out.println("Wert: "+value);
-			
+			if(sensorLocation.x >= trainingSets.line01RGBSet.length || sensorLocation.y >= trainingSets.line01RGBSet[0].length || sensorLocation.x < 0 || sensorLocation.y < 0) {
+				continue;
+			}
 			// TODO: Entsprechendes Lernverfahren, dass dem Robot sagt was zu tun ist
 			mainFrame.noticeSensorDetection(value);
 			mainFrame.calculateLeastSquaresOptimum();
