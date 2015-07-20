@@ -14,8 +14,8 @@ public class Robot_Simulation {
 	private Dimension sensorSize;
 	private Color sensorColor;
 	
-	private Point robotStartLocation;
-	private Point sensorStartLocation;
+	public Point robotStartLocation;
+	public Point sensorStartLocation;
 	
 	private double alpha;
 	
@@ -25,22 +25,22 @@ public class Robot_Simulation {
 	
 	public Robot_Simulation(Point startLocation) {
 		
-		robotStartLocation = startLocation;
+		robotStartLocation = new Point (startLocation.x, startLocation.y);
 		robotSize = new Dimension(20,20);
-		robotLocation = robotStartLocation;
+		robotLocation = new Point (robotStartLocation.x, robotStartLocation.y);
 		robotColor = Color.GREEN;
 
 		sensorSize = new Dimension(6, 6);
 		int sensorStartLocationX = (int)(robotStartLocation.x + robotSize.getWidth());
 		int sensorStartLocationY = (int)(robotStartLocation.y + robotSize.getHeight()/2.0-sensorSize.getHeight()/2.0);
 		sensorStartLocation = new Point(sensorStartLocationX, sensorStartLocationY);
-		sensorLocation = sensorStartLocation;
+		sensorLocation = new Point (sensorStartLocation.x, sensorStartLocation.y);
 		sensorColor = Color.BLUE;
 		
 		alpha = 0;
 	}
 	
-	public void moveRobot (double speedA, double speedB) throws Exception {
+	public void moveRobot (double speedA, double speedB) {
 		double deltaAlpha = (speedA - speedB) / getRobotSize().width;
 		double deltaS = (speedA + speedB) / 2;
 		double deltaX = 0, deltaY = 0;
@@ -58,8 +58,11 @@ public class Robot_Simulation {
 	}
 	
 	public void resetRobot() {
-		robotLocation = robotStartLocation;
-		sensorLocation = sensorStartLocation;
+		robotLocation.x = robotStartLocation.x;
+		robotLocation.y = robotStartLocation.y;
+		sensorLocation.x = sensorStartLocation.x;
+		sensorLocation.y = sensorStartLocation.y;
+		alpha = 0;
 	}
 	
 	private void moveRobotInDirection(double xLength, double yLength) {
